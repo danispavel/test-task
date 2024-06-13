@@ -1,10 +1,10 @@
 import { Product } from "@/lib/features/products/productsApiSlice"
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, Stack } from "@chakra-ui/react"
-import { Field, Form, Formik, FormikHelpers } from "formik"
+import { Field, FieldProps, Form, Formik, FormikHelpers, FormikValues } from "formik"
 
 import * as Yup from 'yup'
 
-export type ProductData = Pick<Product, Exclude<keyof Product, "id">>
+export type ProductData = Partial<Pick<Product, Exclude<keyof Product, "id">>>
 
 const validationSchema = Yup.object({
     title: Yup.string().required('Title is required').max(100, 'Title limit is 100 characters'),
@@ -21,19 +21,20 @@ const ProductForm: React.FC<ProductFormI> = ({ onSubmit, initialValues }) => (<F
     initialValues={initialValues}
     onSubmit={onSubmit}
     validationSchema={validationSchema}>
-    {({ isSubmitting, errors, isValid, values }) => (
+    {({ isSubmitting, errors, isValid }) => (
         <Form style={{ width: '70%' }}>
             <Stack>
                 <Field name="title" >
-                    {({ field }) =>
+                    {({ field }: FieldProps<FormikValues['title']>) =>
                     (<FormControl isInvalid={!!errors?.title}>
                         <FormLabel htmlFor="title">Title</FormLabel>
-                        <Input id="title" value={values.title} {...field} placeholder="title" />
+                        <Input id="title"{...field} placeholder="title" />
                         <FormErrorMessage>{errors?.title}</FormErrorMessage>
                     </FormControl>)}
                 </Field>
                 <Field name="price" >
-                    {({ field }) => (<FormControl isInvalid={!!errors?.price}>
+                    {({ field }: FieldProps<FormikValues['price']>) =>
+                    (<FormControl isInvalid={!!errors?.price}>
                         <FormLabel htmlFor="price">Price</FormLabel>
                         <Input type="number" id="price" {...field} placeholder="price" />
                         <FormErrorMessage>{errors?.price}</FormErrorMessage>

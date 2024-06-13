@@ -22,7 +22,7 @@ export default function EditProduct({ params }: { params: { id: string } }) {
 
     if (isLoading || updateState.isLoading) return <p>Loading...</p>;
 
-    if (isError || updateState.isError) return <p>Error: {(error || updateState.error as Error).message}</p>;
+    if (isError || updateState.isError) return <p>Something went wrong</p>;
 
 
     return <ProductForm initialValues={product} onSubmit={onSubmit} />
